@@ -6,7 +6,15 @@ router.get('/', async (req, res) => {
     try {
         const todo = await Todo.find()
         if (todo) {
-            res.json({ success: true, message: 'Todo successfully retreived', data: todo })
+            const data = { todo: [], completed: [] }
+            todo.forEach((item) => {
+                if (item.status) {
+                    data.completed.push(item)
+                } else {
+                    data.todo.push(item)
+                }
+            })
+            res.json({ success: true, message: 'Todo successfully retreived', data: data })
         } else {
             throw 'Todo fetching failed'
         }
@@ -15,6 +23,7 @@ router.get('/', async (req, res) => {
     }
 
 })
+
 router.post('/create', async (req, res) => {
     try {
         if (req.body?.description) {
@@ -44,6 +53,7 @@ router.delete('/:todoId/delete', async (req, res) => {
     }
 
 })
+
 router.put('/:todoId/update', async (req, res) => {
     try {
         const todoId = req.params.todoId
