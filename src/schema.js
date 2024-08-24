@@ -4,8 +4,11 @@ const todoSchema = new mongoose.Schema({
         type: Date,
         default: Date.now // Sets the default value to the current date/time
     },
-    description:String,
-    status:Boolean
+    description: String,
+    status: {
+        type: Boolean,
+        default: false
+    }
 });
-const Todo =mongoose.model('todo',todoSchema);
+const Todo = mongoose.model('todo', todoSchema);
 module.exports = Todo
