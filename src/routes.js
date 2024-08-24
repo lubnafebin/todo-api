@@ -44,6 +44,24 @@ router.delete('/:todoId/delete', async (req, res) => {
     }
 
 })
+router.put('/:todoId/update', async (req, res) => {
+    try {
+        const todoId = req.params.todoId
+        if (req.body?.description || typeof req.body?.status === 'boolean') {
+
+            const todo = await Todo.updateOne({ _id: todoId }, { $set: req.body });
+            if (todo.acknowledged && todo.modifiedCount != 0) {
+                res.json({ success: false, message: 'todo successfully updated', data: todo })
+            } else {
+                res.status(400).json({ success: false, message: 'todo not updated', data: todo })
+            }
+        } else {
+            res.status(404).json({ success: false, message: 'descrition or status not found' })
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'something went wrong', error })
+    }
+})
 
 
 
